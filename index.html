@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holiday Froyo Counter</title>
+    <style>
+        body {
+            background-color: #f4f8fb;
+            color: #333;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #8b0000;
+            color: white;
+            padding: 20px 0;
+        }
+        header h1 {
+            margin: 0;
+        }
+        .prompt {
+            margin: 20px 0;
+            font-size: 1.2em;
+        }
+        .results {
+            margin-top: 20px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            display: inline-block;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .results table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .results th, .results td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        .results th {
+            background-color: #f8f8f8;
+        }
+        .snowflakes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            animation: fall 10s linear infinite;
+        }
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎄 Holiday Froyo Counter 🎄</h1>
+    </header>
+    <div class="prompt">
+        🎄 Season’s greetings! What flavors of froyo would you like to enjoy today? 🎄<br>
+        Simply type them in, separated by commas, and let us whip up a winter wonderland of flavors just for you!
+    </div>
+    <form id="flavorForm">
+        <input type="text" id="flavorsInput" placeholder="Enter froyo flavors" required>
+        <button type="submit">Get Totals</button>
+    </form>
+    <div id="resultsContainer" class="results" style="display: none;">
+        <h2>🎅 Froyo Flavor Totals: 🎅</h2>
+        <table id="flavorTable">
+            <thead>
+                <tr>
+                    <th>Flavor</th>
+                    <th>Servings</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div class="snowflakes" aria-hidden="true">
+        <div class="snowflake">❄️</div>
+        <div class="snowflake">❄️</div>
+        <div class="snowflake">❄️</div>
+    </div>
+    <script>
+        document.getElementById('flavorForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const input = document.getElementById('flavorsInput').value;
+            const flavors = input.split(',').map(flavor => flavor.trim().toLowerCase());
+
+            const flavorCounts = {};
+            flavors.forEach(flavor => {
+                flavorCounts[flavor] = (flavorCounts[flavor] || 0) + 1;
+            });
+
+            const tbody = document.getElementById('flavorTable').querySelector('tbody');
+            tbody.innerHTML = '';
+
+            Object.entries(flavorCounts).forEach(([flavor, count]) => {
+                const row = document.createElement('tr');
+                const flavorCell = document.createElement('td');
+                const countCell = document.createElement('td');
+
+                flavorCell.textContent = flavor.charAt(0).toUpperCase() + flavor.slice(1);
+                countCell.textContent = count;
+
+                row.appendChild(flavorCell);
+                row.appendChild(countCell);
+                tbody.appendChild(row);
+            });
+
+            document.getElementById('resultsContainer').style.display = 'block';
+        });
+
+        const snowflakes = document.querySelectorAll('.snowflake');
+        snowflakes.forEach(snowflake => {
+            const randomX = Math.random() * 100;
+            const randomSize = Math.random() * 2 + 1;
+            const randomDuration = Math.random() * 10 + 5;
+
+            snowflake.style.left = randomX + '%';
+            snowflake.style.fontSize = randomSize + 'em';
+            snowflake.style.animationDuration = randomDuration + 's';
+        });
+    </script>
+</body>
+</html>
